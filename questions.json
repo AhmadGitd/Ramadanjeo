@@ -1,0 +1,91 @@
+[
+  { "id": 1, "kategori": "Koranen", "point": 100, "niveau": "barn", "spørgsmål": "Hvad er navnet på den allerførste Surah i Koranen?", "svar": "Surah Al-Fatiha", "viden": "Vi læser den i hver eneste bøn (Salah)." },
+  { "id": 2, "kategori": "Koranen", "point": 200, "niveau": "barn", "spørgsmål": "Hvilken Surah er den korteste i hele Koranen?", "svar": "Surah Al-Kawthar", "viden": "Den har kun 3 vers (Ayat)." },
+  { "id": 3, "kategori": "Koranen", "point": 300, "niveau": "barn", "spørgsmål": "Hvilken nat blev Koranen sendt ned på?", "svar": "Laylatul Qadr", "viden": "Det betyder 'Skæbnenatten' og er bedre end 1000 måneder." },
+  { "id": 4, "kategori": "Koranen", "point": 400, "niveau": "barn", "spørgsmål": "Hvilken profet er nævnt flest gange i Koranen?", "svar": "Profeten Musa (Moses)", "viden": "Han er nævnt 136 gange ved navn." },
+  { "id": 5, "kategori": "Koranen", "point": 500, "niveau": "barn", "spørgsmål": "Hvilken Surah beskytter mod alt ondt, hvis man læser den?", "svar": "Ayatul Kursi / De 3 Qul", "viden": "Profeten lærte os at læse dem før sengetid." },
+
+  { "id": 6, "kategori": "Profeterne", "point": 100, "niveau": "barn", "spørgsmål": "Hvem var det første menneske og profet?", "svar": "Profeten Adam (as)", "viden": "Allah lærte ham navnet på alle ting." },
+  { "id": 7, "kategori": "Profeterne", "point": 200, "niveau": "barn", "spørgsmål": "Hvilken profet byggede en stor ark (skib)?", "svar": "Profeten Nuh (Noah)", "viden": "Han reddede dyrene og de troende fra oversvømmelsen." },
+  { "id": 8, "kategori": "Profeterne", "point": 300, "niveau": "barn", "spørgsmål": "Hvilken profet blev slugt af en hval?", "svar": "Profeten Yunus (Jonas)", "viden": "Han bad til Allah inde i hvalens mave og blev reddet." },
+  { "id": 9, "kategori": "Profeterne", "point": 400, "niveau": "barn", "spørgsmål": "Hvilken profet kunne tale med dyr og Jinn?", "svar": "Profeten Sulaiman (Salomon)", "viden": "Han var en meget rig og klog konge." },
+  { "id": 10, "kategori": "Profeterne", "point": 500, "niveau": "barn", "spørgsmål": "Hvad hed Profeten Muhammads (saw) far?", "svar": "Abdullah", "viden": "Han døde før Profeten blev født." },
+
+  { "id": 11, "kategori": "Ramadan", "point": 100, "niveau": "barn", "spørgsmål": "Hvad hedder måltidet vi spiser FØR solopgang?", "svar": "Suhoor", "viden": "Det giver os energi til at faste hele dagen." },
+  { "id": 12, "kategori": "Ramadan", "point": 200, "niveau": "barn", "spørgsmål": "Hvad hedder måltidet når solen går ned?", "svar": "Iftar", "viden": "Man starter ofte med en daddel og vand." },
+  { "id": 13, "kategori": "Ramadan", "point": 300, "niveau": "barn", "spørgsmål": "Hvilken bøn beder man kun i Ramadan måned?", "svar": "Taraweeh", "viden": "Den bedes om aftenen efter Isha i moskéen." },
+  { "id": 14, "kategori": "Ramadan", "point": 400, "niveau": "barn", "spørgsmål": "Hvad hedder festen når Ramadan er slut?", "svar": "Eid al-Fitr", "viden": "Husk at sige 'Eid Mubarak' og give gaver!" },
+  { "id": 15, "kategori": "Ramadan", "point": 500, "niveau": "barn", "spørgsmål": "Hvilket nummer måned er Ramadan i den islamiske kalender?", "svar": "Den 9. måned", "viden": "Kalenderen følger månen, ikke solen." },
+
+  { "id": 16, "kategori": "Bøn & Ibadah", "point": 100, "niveau": "barn", "spørgsmål": "Hvor mange gange skal en muslim bede om dagen?", "svar": "5 gange", "viden": "Fajr, Dhuhr, Asr, Maghrib, Isha." },
+  { "id": 17, "kategori": "Bøn & Ibadah", "point": 200, "niveau": "barn", "spørgsmål": "Hvilken by vender vi os mod, når vi beder?", "svar": "Mekka (Kabaen)", "viden": "Denne retning kaldes Qibla." },
+  { "id": 18, "kategori": "Bøn & Ibadah", "point": 300, "niveau": "barn", "spørgsmål": "Hvad skal man gøre, før man kan bede?", "svar": "Wudu (Afvaskning)", "viden": "Man vasker hænder, mund, næse, ansigt, arme, hår og fødder." },
+  { "id": 19, "kategori": "Bøn & Ibadah", "point": 400, "niveau": "barn", "spørgsmål": "Hvad hedder huset, hvor muslimer beder sammen?", "svar": "En Moské (Masjid)", "viden": "Man tager skoene af, før man går ind på tæppet." },
+  { "id": 20, "kategori": "Bøn & Ibadah", "point": 500, "niveau": "barn", "spørgsmål": "Hvad siger man, når man starter bønnen?", "svar": "Allahu Akbar", "viden": "Det betyder 'Gud er Størst'." },
+
+  { "id": 21, "kategori": "Historie & Blandet", "point": 100, "niveau": "barn", "spørgsmål": "Hvad siger man, når man nyser?", "svar": "Alhamdulillah", "viden": "Og den anden svarer: YarhamukAllah." },
+  { "id": 22, "kategori": "Historie & Blandet", "point": 200, "niveau": "barn", "spørgsmål": "Hvem var den første kvinde, der blev muslim?", "svar": "Khadija (ra)", "viden": "Hun var Profetens kone og støttede ham meget." },
+  { "id": 23, "kategori": "Historie & Blandet", "point": 300, "niveau": "barn", "spørgsmål": "Hvilken farve siges at være Profetens yndlingsfarve?", "svar": "Grøn", "viden": "Man ser tit grønne farver i moskéer." },
+  { "id": 24, "kategori": "Historie & Blandet", "point": 400, "niveau": "barn", "spørgsmål": "Hvad er Zamzam?", "svar": "Helligt vand i Mekka", "viden": "Det sprang frem da profeten Ismail var baby." },
+  { "id": 25, "kategori": "Historie & Blandet", "point": 500, "niveau": "barn", "spørgsmål": "Hvad hedder englen, der kom med Koranen?", "svar": "Jibril (Gabriel)", "viden": "Han er lederen af alle engle." },
+
+  { "id": 26, "kategori": "Koranen", "point": 100, "niveau": "voksen", "spørgsmål": "Hvor mange Juz (dele) er Koranen inddelt i?", "svar": "30 Juz", "viden": "Mange forsøger at læse én Juz hver dag i Ramadan." },
+  { "id": 27, "kategori": "Koranen", "point": 200, "niveau": "voksen", "spørgsmål": "Hvilken Surah har ikke 'Bismillah' i starten?", "svar": "Surah At-Tawbah", "viden": "Den handler om en alvorlig traktat og krig." },
+  { "id": 28, "kategori": "Koranen", "point": 300, "niveau": "voksen", "spørgsmål": "Hvilken Surah kaldes for 'Koranens Hjerte'?", "svar": "Surah Yasin", "viden": "Det siges, at den der læser den, får belønning som at læse Koranen 10 gange." },
+  { "id": 29, "kategori": "Koranen", "point": 400, "niveau": "voksen", "spørgsmål": "Hvilken Surah indeholder lovene om arv (Mirath)?", "svar": "Surah An-Nisa", "viden": "Kapitlet omhandler kvinder og familieret." },
+  { "id": 30, "kategori": "Koranen", "point": 500, "niveau": "voksen", "spørgsmål": "Hvad er det længste vers (Ayat) i Koranen?", "svar": "Ayat al-Dayn (Gælds-verset)", "viden": "Det findes i Surah Al-Baqarah (vers 282)." },
+
+  { "id": 31, "kategori": "Profeterne", "point": 100, "niveau": "voksen", "spørgsmål": "Hvilke 5 profeter kaldes 'Ulul Azm' (De mest beslutsomme)?", "svar": "Nuh, Ibrahim, Musa, Isa, Muhammad", "viden": "De mødte den største modstand men viste mest tålmodighed." },
+  { "id": 32, "kategori": "Profeterne", "point": 200, "niveau": "voksen", "spørgsmål": "Hvilken profet talte direkte med Allah (Kalimullah)?", "svar": "Profeten Musa (Moses)", "viden": "Det skete på bjerget Tur i Sinai." },
+  { "id": 33, "kategori": "Profeterne", "point": 300, "niveau": "voksen", "spørgsmål": "Hvem var profeten Yusuf's far?", "svar": "Profeten Yaqub (Jakob)", "viden": "Han græd indtil han blev blind af sorg over at miste Yusuf." },
+  { "id": 34, "kategori": "Profeterne", "point": 400, "niveau": "voksen", "spørgsmål": "Hvilken profet blev testet med sygdom og tab af rigdom i mange år?", "svar": "Profeten Ayyub (Job)", "viden": "Han er symbolet på absolut tålmodighed (Sabr)." },
+  { "id": 35, "kategori": "Profeterne", "point": 500, "niveau": "voksen", "spørgsmål": "Hvilken profet sov i 100 år og blev vækket igen?", "svar": "Profeten Uzair (Ezra)", "viden": "Allah viste ham, hvordan Han kan genoplive de døde." },
+
+  { "id": 36, "kategori": "Ramadan", "point": 100, "niveau": "voksen", "spørgsmål": "Hvad hedder den specielle port i Jannah for de fastende?", "svar": "Ar-Rayyan", "viden": "Kun de fastende vil kaldes gennem denne port på Dommedag." },
+  { "id": 37, "kategori": "Ramadan", "point": 200, "niveau": "voksen", "spørgsmål": "Hvilket årstal (efter Hijra) blev fasten gjort obligatorisk?", "svar": "2. år efter Hijra", "viden": "Samme år som slaget ved Badr fandt sted." },
+  { "id": 38, "kategori": "Ramadan", "point": 300, "niveau": "voksen", "spørgsmål": "Hvad er 'Kaffarah' for at bryde fasten med vilje (uden grund)?", "svar": "Faste 60 dage eller bespise 60 fattige", "viden": "Det er en streng bod for at bryde en hellig pligt." },
+  { "id": 39, "kategori": "Ramadan", "point": 400, "niveau": "voksen", "spørgsmål": "Hvad kaldes det at isolere sig i moskéen de sidste 10 dage?", "svar": "I'tikaf", "viden": "Profeten gjorde dette hvert år for at søge Laylatul Qadr." },
+  { "id": 40, "kategori": "Ramadan", "point": 500, "niveau": "voksen", "spørgsmål": "Hvornår præcis skal Zakat al-Fitr betales?", "svar": "Før Eid-bønnen starter", "viden": "Hvis det betales efter, tæller det kun som almisse (Sadaqah)." },
+
+  { "id": 41, "kategori": "Bøn & Ibadah", "point": 100, "niveau": "voksen", "spørgsmål": "Hvad kaldes den frivillige natbøn i den sidste 1/3 af natten?", "svar": "Tahajjud / Qiyam al-Layl", "viden": "Det er her Allah er nærmest og bønner accepteres." },
+  { "id": 42, "kategori": "Bøn & Ibadah", "point": 200, "niveau": "voksen", "spørgsmål": "Hvad betyder ordet 'Zakat' sprogligt?", "svar": "At rense / At vokse", "viden": "Det renser din rigdom ved at give en del væk." },
+  { "id": 43, "kategori": "Bøn & Ibadah", "point": 300, "niveau": "voksen", "spørgsmål": "Hvad hedder den bøn, man beder ved solformørkelse?", "svar": "Salat al-Kusuf", "viden": "Det er en speciel bøn med lange recitationer." },
+  { "id": 44, "kategori": "Bøn & Ibadah", "point": 400, "niveau": "voksen", "spørgsmål": "Hvad gør man, hvis man ikke har vand til Wudu?", "svar": "Tayammum (Tør renselse)", "viden": "Man bruger rent støv/jord/sten til ansigt og hænder." },
+  { "id": 45, "kategori": "Bøn & Ibadah", "point": 500, "niveau": "voksen", "spørgsmål": "Hvad er 'Sujud as-Sahw'?", "svar": "Glemsels-sujud", "viden": "To ekstra sujud man laver, hvis man glemmer noget i bønnen." },
+
+  { "id": 46, "kategori": "Historie & Blandet", "point": 100, "niveau": "voksen", "spørgsmål": "Hvem var den første mandlige muslim (voksen)?", "svar": "Abu Bakr as-Siddiq", "viden": "Han var Profetens tætteste ven og første Kalif." },
+  { "id": 47, "kategori": "Historie & Blandet", "point": 200, "niveau": "voksen", "spørgsmål": "Hvad hed Profetens onkel, der beskyttede ham, men døde som ikke-muslim?", "svar": "Abu Talib", "viden": "Profeten var meget ked af hans død ('Sorgens År')." },
+  { "id": 48, "kategori": "Historie & Blandet", "point": 300, "niveau": "voksen", "spørgsmål": "Hvor rejste Profeten hen på Miraj (Himmelfærden)?", "svar": "Fra Mekka til Jerusalem, så til Himlen", "viden": "Her modtog han ordren om de 5 daglige bønner." },
+  { "id": 49, "kategori": "Historie & Blandet", "point": 400, "niveau": "voksen", "spørgsmål": "Hvilken Sahabi (følgesvend) har en hel Surah opkaldt efter sin familie?", "svar": "Imran (Surah Ali-Imran)", "viden": "Imran var far til Maryam (Jesus' mor)." },
+  { "id": 50, "kategori": "Historie & Blandet", "point": 500, "niveau": "voksen", "spørgsmål": "Hvad hedder den kilde i Paradis, som Allah har givet Profeten?", "svar": "Al-Kawthar", "viden": "Vandet er hvidere end mælk og sødere end honning." },
+
+  { "id": 101, "kategori": "Fiqh (Jura)", "point": 100, "niveau": "imam", "spørgsmål": "Hvad er forskellen på Fard 'Ayn og Fard Kifayah?", "svar": "Fard 'Ayn er pligt for hver enkelt. Fard Kifayah er pligt for fællesskabet.", "viden": "Janazah bønnen er et eksempel på Fard Kifayah." },
+  { "id": 102, "kategori": "Fiqh (Jura)", "point": 200, "niveau": "imam", "spørgsmål": "Hvad kaldes det, hvis man glemmer noget i bønnen og retter det til sidst?", "svar": "Sujud as-Sahw", "viden": "Man laver to ekstra sujud før eller efter Taslim." },
+  { "id": 103, "kategori": "Fiqh (Jura)", "point": 300, "niveau": "imam", "spørgsmål": "Hvad er 'Nisab' i forbindelse med Zakat?", "svar": "Minimumsgrænsen for rigdom", "viden": "Hvis man ejer mindre end Nisab, skal man ikke betale Zakat." },
+  { "id": 104, "kategori": "Fiqh (Jura)", "point": 400, "niveau": "imam", "spørgsmål": "Hvad betyder 'Tayammum'?", "svar": "Renselse med jord/støv i stedet for vand", "viden": "Det bruges hvis man er syg eller ikke kan finde vand." },
+  { "id": 105, "kategori": "Fiqh (Jura)", "point": 500, "niveau": "imam", "spørgsmål": "Hvornår er det forbudt (Haram) at faste?", "svar": "På de to Eid-dage", "viden": "Det er dage til fest og spisning, så faste er ikke tilladt." },
+
+  { "id": 106, "kategori": "Koranvidenskab", "point": 100, "niveau": "imam", "spørgsmål": "Hvad kaldes vers, der er 'klare og tydelige' i deres mening?", "svar": "Muhkam", "viden": "De modsatte (tvetydige) kaldes Mutashabih." },
+  { "id": 107, "kategori": "Koranvidenskab", "point": 200, "niveau": "imam", "spørgsmål": "Hvad betyder 'Asbab al-Nuzul'?", "svar": "Årsagerne til åbenbaringen", "viden": "Det forklarer i hvilken situation et bestemt vers blev sendt ned." },
+  { "id": 108, "kategori": "Koranvidenskab", "point": 300, "niveau": "imam", "spørgsmål": "Hvilken Sahabi fik ansvaret for at samle Koranen til én bog?", "svar": "Zaid bin Thabit (ra)", "viden": "Det skete først under Abu Bakr og blev standardiseret under Uthman." },
+  { "id": 109, "kategori": "Koranvidenskab", "point": 400, "niveau": "imam", "spørgsmål": "Hvad er forskellen på Makki og Madani surahs?", "svar": "Makki er før Hijra (Mekka), Madani er efter Hijra (Medina).", "viden": "Makki handler ofte om tro (Tawhid), Madani om love og samfund." },
+  { "id": 110, "kategori": "Koranvidenskab", "point": 500, "niveau": "imam", "spørgsmål": "Hvad betyder ordet 'Tajweed' sprogligt?", "svar": "At gøre noget bedre / at forskønne", "viden": "Det er reglerne for korrekt recitation af Koranen." },
+
+  { "id": 111, "kategori": "Hadith & Sunnah", "point": 100, "niveau": "imam", "spørgsmål": "Hvad betyder 'Sahih' om en hadith?", "svar": "Autentisk / Korrekt", "viden": "Kæden af fortællere er stærk og uden fejl." },
+  { "id": 112, "kategori": "Hadith & Sunnah", "point": 200, "niveau": "imam", "spørgsmål": "Hvad kaldes de to mest autentiske bøger (Bukhari & Muslim) tilsammen?", "svar": "Sahihayn", "viden": "Det betyder 'De to autentiske'." },
+  { "id": 113, "kategori": "Hadith & Sunnah", "point": 300, "niveau": "imam", "spørgsmål": "Hvad er en 'Hadith Qudsi'?", "svar": "Allahs mening formuleret med Profetens ord", "viden": "Forskellig fra Koranen, som er Allahs ord direkte." },
+  { "id": 114, "kategori": "Hadith & Sunnah", "point": 400, "niveau": "imam", "spørgsmål": "En hadith består af to dele: Matn (teksten) og ...?", "svar": "Isnad / Sanad (Kæden)", "viden": "Isnad er listen af personer, der har fortalt hadithen videre." },
+  { "id": 115, "kategori": "Hadith & Sunnah", "point": 500, "niveau": "imam", "spørgsmål": "Hvad betyder 'Mutawatir'?", "svar": "En beretning fortalt af så mange, at den umuligt kan være løgn", "viden": "Det er den højeste grad af sikkerhed i viden." },
+
+  { "id": 116, "kategori": "Aqidah (Tro)", "point": 100, "niveau": "imam", "spørgsmål": "Hvad er det modsatte af Tawhid?", "svar": "Shirk (Afgudsdyrkelse)", "viden": "Det er den eneste synd, Allah ikke tilgiver, hvis man dør i den." },
+  { "id": 117, "kategori": "Aqidah (Tro)", "point": 200, "niveau": "imam", "spørgsmål": "Hvad er 'Tawhid al-Rububiyyah'?", "svar": "Troen på Allah som Skaberen og Opretholderen", "viden": "Selv afgudsdyrkerne i Mekka troede på denne del." },
+  { "id": 118, "kategori": "Aqidah (Tro)", "point": 300, "niveau": "imam", "spørgsmål": "Hvad betyder 'Ihsan' ifølge Jibril-hadithen?", "svar": "At tilbede Allah som om du ser Ham", "viden": "For selvom du ikke ser Ham, så ser Han dig." },
+  { "id": 119, "kategori": "Aqidah (Tro)", "point": 400, "niveau": "imam", "spørgsmål": "Hvad er 'Barzakh'?", "svar": "Livet i graven (mellem død og genopstandelse)", "viden": "Det er her sjælen venter på Dommedag." },
+  { "id": 120, "kategori": "Aqidah (Tro)", "point": 500, "niveau": "imam", "spørgsmål": "Hvad er forskellen på en Nabi (Profet) og en Rasul (Sendebud)?", "svar": "En Rasul kommer med en ny lov/bog, en Nabi følger den forrige", "viden": "Alle Rasuler er Nabier, men ikke alle Nabier er Rasuler." },
+
+  { "id": 121, "kategori": "Islamisk Historie", "point": 100, "niveau": "imam", "spørgsmål": "Hvem var den første af de retledte Kaliffer (Rashidun)?", "svar": "Abu Bakr (ra)", "viden": "Han var kalif i ca. 2 år." },
+  { "id": 122, "kategori": "Islamisk Historie", "point": 200, "niveau": "imam", "spørgsmål": "Hvad kaldes året, hvor Profetens kone Khadija og onkel Abu Talib døde?", "svar": "'Am al-Huzn (Sorgens År)", "viden": "Det var en meget svær tid før Hijra." },
+  { "id": 123, "kategori": "Islamisk Historie", "point": 300, "niveau": "imam", "spørgsmål": "Hvilken pagt blev indgået under træet ved Hudaybiyyah?", "svar": "Bay'at al-Ridwan", "viden": "Allah var tilfreds med de troende ved denne lejlighed." },
+  { "id": 124, "kategori": "Islamisk Historie", "point": 400, "niveau": "imam", "spørgsmål": "Hvem dræbte Hamza (ra) i slaget ved Uhud?", "svar": "Wahshi", "viden": "Han blev senere muslim og dræbte den falske profet Musaylama." },
+  { "id": 125, "kategori": "Islamisk Historie", "point": 500, "niveau": "imam", "spørgsmål": "Hvilken by gjorde Ali ibn Abi Talib (ra) til hovedstad?", "svar": "Kufa (i Irak)", "viden": "Før dette var Medina hovedstaden." }
+]

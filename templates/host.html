@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jeopardy HOST</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, sans-serif; background: #111; color: #fff; padding: 10px; text-align: center; margin: 0; padding-bottom:400px; touch-action: manipulation; }
+        button { width: 100%; padding: 15px; margin: 6px 0; font-size: 1.1em; border-radius: 12px; border: none; cursor: pointer; font-weight: bold; }
+        
+        #login-screen, #setup-screen { position: fixed; top:0; left:0; width:100%; height:100%; background: #111; z-index: 5000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;}
+        input.code-input { font-size: 3em; text-align: center; text-transform: uppercase; width: 100%; max-width: 300px; margin-bottom: 20px; border-radius: 10px; border: 2px solid #f1c40f; background: #222; color: #fff; }
+        .action-btn { background: #f1c40f; color: black; font-size: 1.5em; padding: 20px; }
+        
+        .grid-btn { background: #0652dd; color: #f1c40f; font-size: 1.2em; padding: 20px 0; }
+        .grid-btn.used { background: #222; color: #444; border: 1px solid #333; pointer-events: none; }
+        .control-panel { position: fixed; bottom: 0; left: 0; width: 100%; background: #1a1a1a; padding: 15px 15px 40px 15px; border-top: 4px solid #f1c40f; display: none; z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto; }
+        .btn-reveal { background: #f1c40f; color: #000; font-size: 1.3em; margin-bottom: 15px; }
+        .team-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .team-label { font-weight:bold; font-size:1.2em; width: 40px;}
+        .btn-plus { flex: 1; color: white; padding: 15px 5px; background: #2980b9; }
+        .btn-minus { flex: 1; color: white; padding: 15px 5px; opacity: 0.8; background: #c0392b; }
+        .btn-close { background: #555; color: #aaa; margin-top: 10px; padding: 10px; font-size: 0.9em; }
+        .mode-btn { width: 48%; display: inline-block; padding: 10px; font-size: 0.9em; }
+        #host-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px;}
+        .col-header { font-size: 0.6em; text-transform: uppercase; color: #777; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <h1 style="color:#f1c40f">JEOPARDY HOST</h1>
+        <p>Indtast Koden fra TV'et:</p>
+        <input type="text" id="room-input" class="code-input" maxlength="4" placeholder="AAAA">
+        <button class="action-btn" onclick="joinGame()">TILSLUT</button>
+    </div>
+
+    <div id="setup-screen" style="display:none;">
+        <h1 style="color:#f1c40f">Vælg Antal Hold</h1>
+        <button class="action-btn" style="background:#3498db" onclick="setupGame(2)">2 HOLD</button>
+        <button class="action-btn" style="background:#9b59b6" onclick="setupGame(3)">3 HOLD</button>
+        <button class="action-btn" style="background:#e67e22" onclick="setupGame(4)">4 HOLD</button>
+    </div>
+
+    <div id="game-ui" style="display:none;">
+        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #333;">
+            <button class="mode-btn" style="background:#27ae60" onclick="changeMode('barn')">👶 Børn</button>
+            <button class="mode-btn" style="background:#c0392b" onclick="changeMode('voksen')">👳 Voksen</button>
+            <button class="mode-btn" style="background:#f1c40f; color:black; border:2px solid #fff;" onclick="changeMode('imam')">🕌 Imam</button>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button style="background: #8e44ad; color: white; flex:1;" onclick="showRules()">📜 Regler</button>
+                <button style="background: #333; color: white; flex:1;" onclick="closeModal()">❌ Luk</button>
+            </div>
+            <button style="background: #e74c3c; color: white; margin-top:10px; border: 2px solid #fff;" onclick="resetGame()">🔄 GENSTART SPIL</button>
+        </div>
+        <div id="host-grid"></div>
+    </div>
+
+    <div id="control-panel" class="control-panel">
+        <h3 id="q-title" style="margin: 0 0 10px 0; color:#aaa;">Spørgsmål</h3>
+        <p id="q-answer" style="color: #2ecc71; font-weight: bold; font-size: 1.4em; margin: 0 0 20px 0; background:#222; padding:10px; border-radius:8px;">(Svar)</p>
+        <button class="btn-reveal" onclick="revealAnswer()">👁️ VIS SVAR</button>
+        <div id="team-buttons-container"></div>
+        <button class="btn-close" onclick="closeNoPoints()">Luk uden vinder</button>
+    </div>
+
+    <script>
+        const socket = io();
+        let myRoom = null;
+        let currentCard = null;
+        let allQuestions = [];
+        let currentTeams = ['A', 'B'];
+        let lastState = null; // VIGTIGT: Gemmer data hvis vi ikke er logget ind endnu
+
+        function joinGame() {
+            const code = document.getElementById('room-input').value.toUpperCase();
+            if(code.length !== 4) return alert("Koden skal være 4 bogstaver!");
+            
+            socket.emit('join_game', {room: code}, (success) => {
+                if(success) {
+                    myRoom = code;
+                    document.getElementById('login-screen').style.display = 'none';
+                    // Hvis vi allerede har modtaget data, vis det nu!
+                    if(lastState) renderApp(lastState);
+                } else {
+                    alert("Kunne ikke finde rummet! Tjek koden på TV'et.");
+                }
+            });
+        }
+
+        function setupGame(count) {
+            socket.emit('setup_game', {room: myRoom, count: count});
+        }
+
+        socket.on('load_questions', (data) => { allQuestions = data; });
+
+        socket.on('update_state', (state) => {
+            lastState = state; // Gem dataen altid!
+            if(myRoom) renderApp(state); // Opdater kun hvis vi er logget ind
+        });
+
+        function renderApp(state) {
+            if (!state.game_started) {
+                // Vis setup
+                document.getElementById('setup-screen').style.display = 'flex';
+                document.getElementById('game-ui').style.display = 'none';
+            } else {
+                // Vis spillet
+                document.getElementById('setup-screen').style.display = 'none';
+                document.getElementById('game-ui').style.display = 'block';
+                
+                if(state.scores) currentTeams = Object.keys(state.scores).sort();
+                renderHostGrid(state);
+                
+                if (!state.current_card) { document.getElementById('control-panel').style.display = 'none'; }
+            }
+        }
+
+        // --- Hjælpefunktioner ---
+        function changeMode(mode) { socket.emit('change_mode', {room: myRoom, mode: mode}); }
+        function showRules() { socket.emit('show_rules', {room: myRoom}); }
+        function closeModal() { socket.emit('force_close_modal', {room: myRoom}); }
+        function resetGame() { if(confirm("Nulstil?")) socket.emit('reset_game', {room: myRoom}); }
+        function revealAnswer() { socket.emit('reveal_answer', {room: myRoom}); }
+        function closeNoPoints() { socket.emit('close_without_points', {room: myRoom}); }
+        
+        function openCard(id) {
+            socket.emit('open_card', {room: myRoom, id: id});
+            const q = allQuestions.find(x => x.id === id);
+            if(q) {
+                currentCard = q;
+                document.getElementById('control-panel').style.display = 'block';
+                document.getElementById('q-title').innerText = `${q.kategori} (${q.point})`;
+                document.getElementById('q-answer').innerText = q.svar;
+                renderTeamButtons();
+            }
+        }
+
+        function renderTeamButtons() {
+            const c = document.getElementById('team-buttons-container'); c.innerHTML = "";
+            currentTeams.forEach(team => {
+                const div = document.createElement('div'); div.className = "team-row";
+                div.innerHTML = `<div class="team-label">${team}</div>
+                    <button class="btn-plus" style="background:#2980b9" onmousedown="gp('${team}')">+ ${team}</button>
+                    <button class="btn-minus" style="background:#c0392b" onmousedown="dp('${team}')">BUZZ</button>`;
+                c.appendChild(div);
+            });
+        }
+        
+        function gp(t) { socket.emit('give_points', {room: myRoom, team: t, points: currentCard.point}); }
+        function dp(t) { if(navigator.vibrate) navigator.vibrate(50); socket.emit('deduct_points', {room: myRoom, team: t, points: currentCard.point}); }
+
+        function renderHostGrid(state) {
+            const grid = document.getElementById('host-grid'); grid.innerHTML = "";
+            let categories = [];
+            if (state.current_mode === 'imam') categories = ["Fiqh (Jura)", "Koranvidenskab", "Hadith & Sunnah", "Aqidah (Tro)", "Islamisk Historie"];
+            else categories = ["Koranen", "Profeterne", "Ramadan", "Bøn & Ibadah", "Historie & Blandet"];
+            
+            grid.style.gridTemplateColumns = `repeat(5, 1fr)`;
+            categories.forEach(cat => {
+                const h = document.createElement('div'); h.className = 'col-header'; h.innerText = cat.substring(0, 4) + ".."; grid.appendChild(h);
+            });
+
+            const activeQuestions = allQuestions.filter(q => q.niveau === state.current_mode);
+            const points = [100, 200, 300, 400, 500];
+
+            points.forEach(pointVal => {
+                categories.forEach(cat => {
+                    const q = activeQuestions.find(item => item.kategori.includes(cat) && item.point === pointVal);
+                    const btn = document.createElement('button'); btn.className = 'grid-btn';
+                    if (q) {
+                        btn.innerText = q.point;
+                        if (state.used_cards.includes(q.id)) { btn.className += " used"; } 
+                        else { btn.onclick = () => openCard(q.id); }
+                    } else { btn.style.visibility = "hidden"; }
+                    grid.appendChild(btn);
+                });
+            });
+        }
+
+        // TJEK OM VI KOMMER FRA EN QR KODE
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const roomParam = urlParams.get('room');
+            
+            if (roomParam) {
+                // Udfyld feltet automatisk
+                document.getElementById('room-input').value = roomParam;
+                // Og log ind med det samme!
+                joinGame();
+            }
+        }
+    </script>
+</body>
+</html>

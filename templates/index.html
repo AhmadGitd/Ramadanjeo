@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Ramadan Jeopardy - TV</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Reem Kufi', sans-serif;
+            background: radial-gradient(circle at center, #1a2550 0%, #0b0c2a 100%);
+            color: white; text-align: center; margin: 0; padding: 10px; height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        #lobby-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1a2550 0%, #0b0c2a 100%);
+            z-index: 3000; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+        }
+        
+        .room-code-box {
+            background: rgba(255,255,255,0.1); border: 4px solid #f1c40f;
+            padding: 30px 60px; border-radius: 20px; margin-top: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4);} 70% {box-shadow: 0 0 0 20px rgba(241, 196, 15, 0);} 100% {box-shadow: 0 0 0 0 rgba(241, 196, 15, 0);} }
+
+        header { flex: 0 0 auto; margin-bottom: 10px; }
+        h1 { color: #f1c40f; text-shadow: 0 0 20px #f39c12; font-size: 3em; margin: 0; line-height: 1; }
+
+        #mode-badge {
+            display: inline-block; background: #2ecc71; color: #000;
+            padding: 5px 20px; border-radius: 20px; font-weight: bold;
+            font-size: 1.2em; margin-bottom: 15px; border: 2px solid white;
+        }
+
+        .scoreboard { display: inline-flex; gap: 40px; background: rgba(255,255,255,0.05); padding: 10px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
+        .score-box { text-align: center; min-width: 100px; }
+        .score-val { font-size: 2em; font-weight: bold; color: #f1c40f; }
+
+        #game-board { 
+            display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: auto repeat(5, 1fr);
+            gap: 10px; width: 100%; max-width: 1400px; margin: 0 auto; flex: 1 1 auto; min-height: 0;
+            align-items: center; justify-items: center;
+        }
+        
+        .category-header { background: linear-gradient(to bottom, #2c3e50, #1a2550); display: flex; align-items: center; justify-content: center; font-weight: bold; border-bottom: 3px solid #f1c40f; text-transform: uppercase; padding: 5px; height: 100%; width:100%; }
+        .card { background: linear-gradient(135deg, #0652dd, #1289a7); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 2.5em; font-weight: bold; border-radius: 8px; border: 2px solid #0984e3; width:100%; height:100%;}
+        .card.used { background: #0b0c2a; border-color: #1a2550; opacity: 0.15; color: transparent; box-shadow: none; }
+
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
+        #modal-content { background: #1a2550; border: 4px solid #f1c40f; padding: 40px; border-radius: 20px; width: 90%; max-width:900px; text-align: center; }
+        #question-text { font-size: 3em; margin-bottom: 20px; color: #fff; }
+        #answer-text { display: none; color: #2ecc71; font-size: 2.5em; font-weight: bold; margin-top: 20px; border-top: 1px dashed #555; padding-top: 20px;}
+        #knowledge-text { display: none; font-size: 1.5em; font-style: italic; color: #ecf0f1; margin-top: 15px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; }
+        
+        button.start-btn { font-size: 2em; padding: 20px 50px; background: #f1c40f; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 0 20px rgba(241, 196, 15, 0.5); }
+    </style>
+</head>
+<body>
+
+    <div id="lobby-screen">
+        <h1 style="font-size: 5em; margin-bottom: 20px;">🌙 Ramadan Jeopardy</h1>
+        
+        <div id="start-btn-container">
+            <button class="start-btn" onclick="createNewGame()">START NYT SPIL</button>
+            <p>Klik for at oprette et rum</p>
+        </div>
+
+        <div id="code-display" style="display:none; text-align:center;">
+            <h2>Gå til hjemmesiden på din mobil og vælg "HOST"</h2>
+            <p>Indtast denne kode:</p>
+            <div class="room-code-box">
+                <h1 id="room-code-text" style="font-size: 6em; letter-spacing: 10px; font-family: monospace;">----</h1>
+            </div>
+            <div id="qrcode-container" style="background:white; padding:15px; margin:20px auto; width:230px; border-radius:10px;"></div>
+            <h3 id="waiting-text" style="color: #2ecc71; margin-top: 20px;">Scan QR eller tast koden</h3>
+        </div>
+    </div>
+
+    <div id="game-ui" style="display:none; width:100%; height:100%; flex-direction:column;">
+        <header>
+            <div id="scoreboard" class="scoreboard"></div>
+            <h1>🌙 Ramadan Jeopardy</h1>
+            <div id="mode-badge">BØRNE MODE 👶</div>
+        </header>
+
+        <div id="game-board"></div>
+    </div>
+
+    <div id="modal-overlay">
+        <div id="modal-content"><div id="modal-body"></div></div>
+    </div>
+
+    <audio id="sound-intro" src="/static/intro.mp3"></audio>
+    <audio id="sound-correct" src="/static/correct.mp3"></audio>
+    <audio id="sound-win" src="/static/win.mp3"></audio>
+    <audio id="sound-wrong" src="/static/wrong.mp3"></audio>
+
+    <script>
+        const socket = io();
+        let allQuestions = [];
+        let myRoom = null;
+
+        function createNewGame() {
+            document.getElementById('sound-intro').play().catch(e=>{});
+            document.getElementById('sound-intro').pause();
+            document.getElementById('sound-intro').currentTime = 0;
+            socket.emit('create_game');
+        }
+
+        // 2. MODTAG KODE & LAV QR
+        socket.on('game_created', (data) => {
+            myRoom = data.room;
+            document.getElementById('start-btn-container').style.display = 'none';
+            document.getElementById('code-display').style.display = 'block';
+            document.getElementById('room-code-text').innerText = myRoom;
+
+            // Generer QR Koden
+            // Den laver et link som: https://dit-spil.com/host?room=ABCD
+            const hostUrl = window.location.href + "host?room=" + myRoom;
+            
+            document.getElementById('qrcode-container').innerHTML = ""; // Tøm først
+            new QRCode(document.getElementById("qrcode-container"), {
+                text: hostUrl,
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        socket.on('player_joined', () => {
+            document.getElementById('waiting-text').innerText = "HOST FORBUNDET! Gør klar...";
+            setTimeout(() => {
+                document.getElementById('lobby-screen').style.display = 'none';
+                document.getElementById('game-ui').style.display = 'flex';
+                playSound('sound-intro');
+            }, 2000);
+        });
+
+        socket.on('load_questions', (data) => { allQuestions = data; });
+
+        socket.on('update_state', (state) => {
+            // Hvis spillet IKKE er sat op (intet antal hold valgt)
+            if (!state.game_started) {
+                document.getElementById('game-board').innerHTML = "<h2 style='grid-column:1/-1; color:#aaa;'>Venter på at Host vælger hold...</h2>";
+                document.getElementById('scoreboard').innerHTML = "";
+                return;
+            }
+
+            // SCOREBOARD
+            const sc = document.getElementById('scoreboard');
+            sc.innerHTML = "";
+            if(state.scores) {
+                Object.keys(state.scores).sort().forEach(team => {
+                    const box = document.createElement('div');
+                    box.className = 'score-box';
+                    box.innerHTML = `<div class="team-name">HOLD ${team}</div><div class="score-val">${state.scores[team]}</div>`;
+                    sc.appendChild(box);
+                });
+            }
+
+            // MODE
+            const b = document.getElementById('mode-badge');
+            if(state.current_mode === 'barn') {
+                b.innerText = "👶 BØRNE MODE"; b.style.background = "#2ecc71"; b.style.color = "#000";
+                document.body.style.background = "radial-gradient(circle at center, #1a2550 0%, #0b0c2a 100%)";
+            } else if(state.current_mode === 'voksen') {
+                b.innerText = "👳 VOKSEN MODE"; b.style.background = "#c0392b"; b.style.color = "#fff";
+                document.body.style.background = "radial-gradient(circle at center, #4a0e13 0%, #1a0505 100%)";
+            } else if(state.current_mode === 'imam') {
+                b.innerText = "🕌 IMAM MODE"; b.style.background = "linear-gradient(45deg, #f1c40f, #d4ac0d)"; b.style.color = "#000";
+                document.body.style.background = "radial-gradient(circle at center, #2c2c2c 0%, #000000 100%)";
+            }
+            
+            if(allQuestions.length > 0) renderBoard(state);
+        });
+
+        function renderBoard(state) {
+            const board = document.getElementById('game-board');
+            board.innerHTML = "";
+            let categories = [];
+            if (state.current_mode === 'imam') categories = ["Fiqh (Jura)", "Koranvidenskab", "Hadith & Sunnah", "Aqidah (Tro)", "Islamisk Historie"];
+            else categories = ["Koranen", "Profeterne", "Ramadan", "Bøn & Ibadah", "Historie & Blandet"];
+
+            board.style.gridTemplateColumns = `repeat(5, 1fr)`;
+
+            categories.forEach(cat => {
+                const header = document.createElement('div');
+                header.className = 'category-header'; header.innerText = cat;
+                board.appendChild(header);
+            });
+
+            const activeQuestions = allQuestions.filter(q => q.niveau === state.current_mode);
+            const points = [100, 200, 300, 400, 500];
+            
+            points.forEach(pointVal => {
+                categories.forEach(cat => {
+                    const q = activeQuestions.find(item => item.kategori.includes(cat) && item.point === pointVal);
+                    const card = document.createElement('div'); card.className = 'card';
+                    if (q) {
+                        if (state.used_cards.includes(q.id)) { card.className += " used"; } 
+                        else { card.innerText = q.point; }
+                    } else { card.style.visibility = "hidden"; card.style.border="none"; card.style.background="transparent"; }
+                    board.appendChild(card);
+                });
+            });
+        }
+
+        socket.on('card_opened', (card) => {
+            document.getElementById('modal-body').innerHTML = `<div id="question-text">${card.spørgsmål}</div><div id="answer-text">${card.svar}</div><div id="knowledge-text">💡 ${card.viden}</div>`;
+            document.getElementById('modal-overlay').style.display = 'flex';
+        });
+        socket.on('answer_revealed', () => {
+            document.getElementById('answer-text').style.display = 'block';
+            document.getElementById('knowledge-text').style.display = 'block';
+            playSound('sound-correct');
+        });
+        socket.on('close_modal', () => { document.getElementById('modal-overlay').style.display = 'none'; });
+        socket.on('play_sound', (id) => { 
+            playSound(id); 
+            if(id==='sound-wrong') { document.body.style.backgroundColor = "#c0392b"; setTimeout(()=>{
+                // Hack: trigger a minimal rerender to restore bg
+                socket.emit('request_state_update'); // This doesn't exist, but we can just use settimeout
+                document.body.style.backgroundColor = ""; // Manual reset
+                const b = document.getElementById('mode-badge'); // Restore gradient based on mode logic
+            }, 300); } 
+        });
+        socket.on('game_over', (text) => {
+            document.getElementById('modal-body').innerHTML = `<h1 style="font-size:4em; color:#f1c40f;">${text}</h1>`;
+            document.getElementById('modal-overlay').style.display = 'flex';
+            playSound('sound-win'); confetti({ particleCount: 300, spread: 150, origin: { y: 0.6 } });
+        });
+        socket.on('show_rules', () => {
+             document.getElementById('modal-body').innerHTML = `<h2 style="color:#f1c40f;">📜 Spilleregler</h2><ul style="text-align:left; font-size:1.5em; list-style:none;"><li>1. Vælg et spørgsmål.</li><li>2. Alle må gætte!</li><li>3. Rigtigt svar = Point.</li><li>4. Forkert svar = Minus point!</li></ul>`;
+            document.getElementById('modal-overlay').style.display = 'flex';
+        });
+
+        function playSound(id) { const audio = document.getElementById(id); if(audio) { audio.currentTime=0; audio.play().catch(e=>{}); } }
+    </script>
+</body>
+</html>

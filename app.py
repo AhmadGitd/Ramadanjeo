@@ -12,17 +12,18 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ramadan_secret_key'
 
-# Render understøtter WebSockets direkte, så vi behøver ikke tvinge polling her
-socketio = SocketIO(app, cors_allowed_origins="*")
-
-# Vi gemmer spillet i RAM (hukommelsen) - det er lynhurtigt!
-games = {}
 
 def load_questions():
     with open('questions.json', 'r', encoding='utf-8') as f:
         return json.load(f)
 
 questions = load_questions()
+# Render understøtter WebSockets direkte, så vi behøver ikke tvinge polling her
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+# Vi gemmer spillet i RAM (hukommelsen) - det er lynhurtigt!
+games = {}
+
 
 @app.route('/')
 def index():
@@ -101,5 +102,6 @@ def handle_close(data):
 if __name__ == '__main__':
     # Render bruger port 10000 som standard, men Flask finder selv ud af det via Gunicorn
     socketio.run(app)
+
 
 

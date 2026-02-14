@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 import eventlet
 eventlet.monkey_patch()
-# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit, join_room
 import json
@@ -100,4 +101,5 @@ def handle_close(data):
 if __name__ == '__main__':
     # Render bruger port 10000 som standard, men Flask finder selv ud af det via Gunicorn
     socketio.run(app)
+
 

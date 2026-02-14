@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import eventlet
-eventlet.monkey_patch()
+from gevent import monkey
+monkey.patch_all()
 
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit, join_room
@@ -14,12 +14,15 @@ app.config['SECRET_KEY'] = 'ramadan_secret_key'
 
 
 def load_questions():
-    with open('questions.json', 'r', encoding='utf-8') as f:
-        return json.load(f)
+    try:
+        with open('questions.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        return []
 
-questions = load_questions()
+all_questions = load_questions()
 # Render understøtter WebSockets direkte, så vi behøver ikke tvinge polling her
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
 
 # Vi gemmer spillet i RAM (hukommelsen) - det er lynhurtigt!
 games = {}
@@ -102,6 +105,7 @@ def handle_close(data):
 if __name__ == '__main__':
     # Render bruger port 10000 som standard, men Flask finder selv ud af det via Gunicorn
     socketio.run(app)
+
 
 
 

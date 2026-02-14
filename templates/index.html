@@ -153,6 +153,13 @@
                 document.getElementById('game-board').innerHTML = "<h2 style='grid-column:1/-1; color:#aaa;'>Venter på at Host vælger hold...</h2>";
                 document.getElementById('scoreboard').innerHTML = "";
                 return;
+
+                // Hvis vi har scores, men ingen spørgsmål endnu, så bed om dem
+    if (allQuestions.length === 0) {
+        socket.emit('request_questions'); 
+    }
+
+    renderBoard(state); // Tegn griddet
             }
 
             // SCOREBOARD
@@ -246,4 +253,5 @@
         function playSound(id) { const audio = document.getElementById(id); if(audio) { audio.currentTime=0; audio.play().catch(e=>{}); } }
     </script>
 </body>
+
 </html>

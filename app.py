@@ -57,14 +57,39 @@ def on_join_game(data):
         return True
     return False
 
-# NY/RETTET: Håndterer buzzer-tryk (og sender lyd-signal til TV'et)
+# --- HER ER DE MANGLENDE FUNKTIONER DER FIXER DINE KNAPPER ---
+
+@socketio.on('change_mode')
+def handle_mode(data):
+    room = data['room']
+    if room in games:
+        games[room]['current_mode'] = data['mode']
+        emit('update_state', games[room], to=room)
+
+@socketio.on('show_rules')
+def handle_rules(data):
+    emit('show_rules', to=data['room'])
+
+@socketio.on('force_close_modal')
+def handle_force_close(data):
+    emit('close_modal', to=data['room'])
+
+@socketio.on('deduct_points')
+def handle_deduct(data):
+    room = data['room']
+    if room in games:
+        # Minus point for forkert svar/buzz
+        games[room]['scores'][data['team']] -= data['points']
+        emit('update_state', games[room], to=room)
+        emit('play_sound', 'sound-wrong', to=room)
+
 @socketio.on('buzzer_pressed')
 def handle_buzzer(data):
-    room = data['room']
-    # Vi sender signalet videre til alle i rummet, så TV'et kan afspille lyden
-    emit('buzzer_hit', {'team': data['team']}, to=room)
+    # Sender signal til TV om at nogen har trykket
+    emit('play_sound', 'sound-wrong', to=data['room']) 
 
-# NY/RETTET: Nulstiller spillet helt
+# ---------------------------------------------------------
+
 @socketio.on('reset_game')
 def handle_reset(data):
     room = data['room']
@@ -74,7 +99,6 @@ def handle_reset(data):
         games[room]['current_card'] = None
         games[room]['game_started'] = False
         emit('update_state', games[room], to=room)
-        emit('game_reset', to=room)
 
 @socketio.on('setup_game')
 def handle_setup(data):

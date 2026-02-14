@@ -14,7 +14,6 @@ app.config['SECRET_KEY'] = 'ramadan_secret_key'
 
 def load_questions():
     try:
-        # Vi sikrer os, at vi læser filen korrekt ind i hukommelsen ved opstart
         with open('questions.json', 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
@@ -22,7 +21,6 @@ def load_questions():
         return []
 
 all_questions = load_questions()
-# Vi bruger gevent som async_mode for at matche din Gunicorn-startkommando
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
 
 games = {}
@@ -55,27 +53,42 @@ def on_join_game(data):
         join_room(room)
         emit('player_joined', to=room)
         emit('update_state', games[room], to=room)
-        # VIGTIGT: Vi sender spørgsmålene med det samme, når nogen joiner
         emit('load_questions', all_questions, to=room)
         return True
     return False
+
+# NY/RETTET: Håndterer buzzer-tryk (og sender lyd-signal til TV'et)
+@socketio.on('buzzer_pressed')
+def handle_buzzer(data):
+    room = data['room']
+    # Vi sender signalet videre til alle i rummet, så TV'et kan afspille lyden
+    emit('buzzer_hit', {'team': data['team']}, to=room)
+
+# NY/RETTET: Nulstiller spillet helt
+@socketio.on('reset_game')
+def handle_reset(data):
+    room = data['room']
+    if room in games:
+        games[room]['scores'] = {team: 0 for team in games[room]['scores']}
+        games[room]['used_cards'] = []
+        games[room]['current_card'] = None
+        games[room]['game_started'] = False
+        emit('update_state', games[room], to=room)
+        emit('game_reset', to=room)
 
 @socketio.on('setup_game')
 def handle_setup(data):
     room = data['room']
     if room in games:
-        # Opretter hold (Hold A, B, C...)
         games[room]['scores'] = {chr(65+i): 0 for i in range(data['count'])}
         games[room]['game_started'] = True
         emit('update_state', games[room], to=room)
-        # Sender de indlæste spørgsmål til alle i rummet
         emit('load_questions', all_questions, to=room)
 
 @socketio.on('open_card')
 def handle_open(data):
     room = data['room']
     if room in games:
-        # Finder det specifikke spørgsmål i vores all_questions liste
         card = next((q for q in all_questions if q['id'] == data['id']), None)
         if card:
             games[room]['current_card'] = card

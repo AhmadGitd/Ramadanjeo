@@ -12,21 +12,20 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ramadan_secret_key'
 
-
 def load_questions():
     try:
+        # Vi sikrer os, at vi læser filen korrekt ind i hukommelsen ved opstart
         with open('questions.json', 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
+        print(f"Fejl ved indlæsning af JSON: {e}")
         return []
 
 all_questions = load_questions()
-# Render understøtter WebSockets direkte, så vi behøver ikke tvinge polling her
+# Vi bruger gevent som async_mode for at matche din Gunicorn-startkommando
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
 
-# Vi gemmer spillet i RAM (hukommelsen) - det er lynhurtigt!
 games = {}
-
 
 @app.route('/')
 def index():
@@ -56,6 +55,8 @@ def on_join_game(data):
         join_room(room)
         emit('player_joined', to=room)
         emit('update_state', games[room], to=room)
+        # VIGTIGT: Vi sender spørgsmålene med det samme, når nogen joiner
+        emit('load_questions', all_questions, to=room)
         return True
     return False
 
@@ -63,16 +64,19 @@ def on_join_game(data):
 def handle_setup(data):
     room = data['room']
     if room in games:
+        # Opretter hold (Hold A, B, C...)
         games[room]['scores'] = {chr(65+i): 0 for i in range(data['count'])}
         games[room]['game_started'] = True
         emit('update_state', games[room], to=room)
-        emit('load_questions', questions, to=room)
+        # Sender de indlæste spørgsmål til alle i rummet
+        emit('load_questions', all_questions, to=room)
 
 @socketio.on('open_card')
 def handle_open(data):
     room = data['room']
     if room in games:
-        card = next((q for q in questions if q['id'] == data['id']), None)
+        # Finder det specifikke spørgsmål i vores all_questions liste
+        card = next((q for q in all_questions if q['id'] == data['id']), None)
         if card:
             games[room]['current_card'] = card
             emit('card_opened', card, to=room)
@@ -103,9 +107,4 @@ def handle_close(data):
         emit('close_modal', to=room)
 
 if __name__ == '__main__':
-    # Render bruger port 10000 som standard, men Flask finder selv ud af det via Gunicorn
     socketio.run(app)
-
-
-
-
